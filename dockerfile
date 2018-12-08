@@ -1,6 +1,7 @@
-FROM ubuntu:14.04
+FROM alpine:latest
 
-RUN apt-get update && apt-get install -y ntp && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache openntpd
+COPY stuff/ntpd.conf /etc/ntpd.conf
 
-EXPOSE 123
-CMD ["/usr/sbin/ntpd", "-n"]
+EXPOSE 123/udp
+ENTRYPOINT [ "/usr/sbin/ntpd", "-v", "-d", "-s" ]
